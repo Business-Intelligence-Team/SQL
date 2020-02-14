@@ -1,0 +1,7 @@
+WITH calendar as (
+        SELECT rownum as "S.No", add_months(trunc(sysdate, 'YEAR'), -12) + rownum - 1 as CalDays
+        from dual
+        connect by rownum < trunc(sysdate+2) - add_months(trunc(sysdate, 'YEAR'), -12)
+    )
+select "S.No",CalDays, to_char(CalDays, 'MM/DD/YY') "Short Date", to_char(CalDays, 'YYYY') "Year",to_char(CalDays, 'MM/YY') "Month/Year", to_char(CalDays, 'MON-YY') "Month Year", to_char(CalDays,'Q') as "Quarter",to_char(CalDays, 'MM') "Month Num", to_char(CalDays, 'Month') "Month Name", to_char(CalDays,'Day') as "DayName", to_char(CalDays,'d') as "DayofWeekNum", case when to_char(CalDays,'d') in (1,7) then 0 else 1 end as BusinessDay, case when to_char(CalDays,'d') in (1,7) then 0 else 8 end as BusinessHours
+from calendar
